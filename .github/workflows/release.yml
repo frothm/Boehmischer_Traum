@@ -1,0 +1,36 @@
+name: Create Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'New tag name'
+        required: true
+
+# ...
+
+jobs:
+  goreleaser:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create tag
+      	uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+        run: git tag ${{ github.event.inputs.tag }}
+      - name: Compile PDF
+        run: apt install -y musescore3 && musescore3 -o Boehmischer_Traum.pdf Boehmischer_Traum.mscx
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.event.inputs.tag }}
+          release_name: Release ${{ github.event.inputs.tag }}
+          body:
+            Changes in this Release
+            - New PDF of the score
+          draft: false
+          prerelease: false
+      # other steps bellow as usual
