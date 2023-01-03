@@ -117,7 +117,7 @@ Arr: aic turner
           </Text>
         <Text>
           <style>Lyricist</style>
-          <text>Notiert: Florian Rothmeyer</text>
+          <text>Not.: Florian Rothmeyer</text>
           </Text>
         </VBox>
       <Measure len="1/4">
