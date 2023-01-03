@@ -7,8 +7,6 @@ on:
         description: 'New tag name'
         required: true
 
-# ...
-
 jobs:
   goreleaser:
     runs-on: ubuntu-latest
@@ -33,4 +31,13 @@ jobs:
             - New PDF of the score
           draft: false
           prerelease: false
-      # other steps bellow as usual
+      - name: Upload PDF
+        uses: actions/upload-release-asset@v1
+          env:
+            GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./Boehmischer_Traum.pdf
+          asset_name: Boehmischer_Traum.pdf
+          asset_content_type: application/pdf
+
