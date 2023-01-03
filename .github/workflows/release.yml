@@ -10,10 +10,11 @@ jobs:
     name: Create Release
     runs-on: ubuntu-latest
     steps:
-      - name: Create tag
+      - name: Checkout code
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+      - name: Create tag
         run: git tag ${{ github.event.inputs.tag }}
       - name: Compile PDF
         run: apt install -y musescore3 && musescore3 -o Boehmischer_Traum.pdf Boehmischer_Traum.mscx
