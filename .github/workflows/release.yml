@@ -16,8 +16,8 @@ jobs:
           fetch-depth: 0
       - name: Create tag
         run: git tag ${{ github.event.inputs.tag }}
-      - name: Compile PDF
-        run: sudo apt install -y musescore3 && export QT_QPA_PLATFORM=offscreen && musescore3 -o Boehmischer_Traum.pdf Boehmischer_Traum.mscx
+      - name: Compile PDF and MIDI
+        run: sudo apt install -y musescore3 && export QT_QPA_PLATFORM=offscreen && musescore3 -o Boehmischer_Traum.pdf Boehmischer_Traum.mscx && musescore3 -o Boehmischer_Traum.mid Boehmischer_Traum.mscx
       - name: Create release
         id: create_release
         uses: actions/create-release@v1
@@ -27,8 +27,8 @@ jobs:
           tag_name: ${{ github.event.inputs.tag }}
           release_name: Release ${{ github.event.inputs.tag }}
           body:
-            Changes in this Release
-            - New PDF of the score
+            "Changes in this Release
+            - New PDF and MIDI files of the score"
           draft: false
           prerelease: false
       - name: Upload PDF
@@ -40,4 +40,12 @@ jobs:
           asset_path: ./Boehmischer_Traum.pdf
           asset_name: Boehmischer_Traum.pdf
           asset_content_type: application/pdf
-
+      - name: Upload MIDI
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./Boehmischer_Traum.mid
+          asset_name: Boehmischer_Traum.mid
+          asset_content_type: audio/midi
